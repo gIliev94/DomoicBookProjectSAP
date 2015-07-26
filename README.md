@@ -9,7 +9,7 @@ Developped using the following:
 - JSP(Java Server Pages)
 
 The idea of this application was to act as an online domoic book for condominuims.
-The information in such a document is supposed to be private and visible only to residents, so this application employs password hashing and doesn`t let the user to browse any information other than the Home page before logging in.
+The information in such a document is supposed to be private and visible only to residents, so this application employs password hashing and doesn`t let the user browse any information other than the Home page before logging in.
 
 Authentication consists of a resident`s flat number and password. The database(MySQL) supports 8 tables:
 - Flats
