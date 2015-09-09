@@ -34,6 +34,7 @@ private static final long serialVersionUID = 1L;
             response.sendRedirect("Login.jsp");
 		}
 		else{
+			
 			int flatNumber = Integer.valueOf(request.getParameter("flatNumber"));
 			String password = String.valueOf(request.getParameter("password"));
             
