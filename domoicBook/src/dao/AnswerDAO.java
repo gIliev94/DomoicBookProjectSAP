@@ -42,7 +42,7 @@ public class AnswerDAO {
         String query = "SELECT u FROM Answer u WHERE u.discussion=:discussion AND u.flat=:flat";
            TypedQuery<Answer>getQuery = em.createQuery(query, Answer.class);
           getQuery.setParameter("discussion",discussion);
-           getQuery.setParameter("flat",flat);
+          getQuery.setParameter("flat",flat);
            return queryAnswer(getQuery) != null;
       }
     
