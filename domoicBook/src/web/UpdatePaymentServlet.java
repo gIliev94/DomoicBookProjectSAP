@@ -11,29 +11,27 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.PaymentDAO;
 
-
 public class UpdatePaymentServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
 
     public UpdatePaymentServlet() {
-        super();
+	super();
     }
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+	response.sendRedirect("CheckObligationServlet");
+    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect("CheckObligationServlet");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	PaymentDAO payment = new PaymentDAO(getEntityManager());
+	String[] values = request.getParameterValues("choose");
+	for (int i = 0; i < values.length; i++) {
+	    String[] elements = values[i].split("[-]");
+	    payment.UpdatePayment(Integer.valueOf(elements[1]), Integer.valueOf(elements[0]));
 	}
-
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		PaymentDAO payment=new PaymentDAO(getEntityManager());
-		String[]values=request.getParameterValues("choose");
-		for(int i=0;i<values.length;i++){
-		String[]elements=values[i].split("[-]");
-		payment.UpdatePayment(Integer.valueOf(elements[1]),Integer.valueOf(elements[0]));
-		}	
-		doGet(request, response);
-	}
+	doGet(request, response);
+    }
 }

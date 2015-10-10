@@ -8,87 +8,83 @@ import java.util.Date;
 
 import javax.persistence.*;
 
-
-
 @Entity
-@Table(name="private_messages")
-@NamedQuery(name="PrivateMessage.findAll", query="SELECT p FROM PrivateMessage p")
+@Table(name = "private_messages")
+@NamedQuery(name = "PrivateMessage.findAll", query = "SELECT p FROM PrivateMessage p")
 public class PrivateMessage implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	private int id;
+    @Id
+    private int id;
 
-	@Lob
-	private String content;
+    @Lob
+    private String content;
 
-	@Column(name="DATE")
-	 private Timestamp date;
+    @Column(name = "DATE")
+    private Timestamp date;
 
-	private String title;
+    private String title;
 
+    @ManyToOne
+    @JoinColumn(name = "senderNumber")
+    private Flat flat1;
 
-	@ManyToOne
-	@JoinColumn(name="senderNumber")
-	private Flat flat1;
+    @ManyToOne
+    @JoinColumn(name = "receiverNumber")
+    private Flat flat2;
 
+    public PrivateMessage() {
+    }
 
-	@ManyToOne
-	@JoinColumn(name="receiverNumber")
-	private Flat flat2;
+    public int getId() {
+	return this.id;
+    }
 
-	public PrivateMessage() {
-	}
+    public void setId(int id) {
+	this.id = id;
+    }
 
-	public int getId() {
-		return this.id;
-	}
+    public String getContent() {
+	return this.content;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setContent(String content) {
+	this.content = content;
+    }
 
-	public String getContent() {
-		return this.content;
-	}
+    public String getDate() {
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	return dateFormat.format(this.date);
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public void setDate() {
+	Calendar calendar = Calendar.getInstance();
+	Date dateNow = calendar.getTime();
+	this.date = new Timestamp(dateNow.getTime());
+    }
 
-	public String getDate() {
-		  SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		  return dateFormat.format(this.date);
-		  }
+    public String getTitle() {
+	return this.title;
+    }
 
-		  public void setDate() {
-		   Calendar calendar=Calendar.getInstance();
-		   Date dateNow=calendar.getTime();
-		   this.date=new Timestamp(dateNow.getTime());
-		  }
+    public void setTitle(String title) {
+	this.title = title;
+    }
 
-	public String getTitle() {
-		return this.title;
-	}
+    public Flat getFlat1() {
+	return this.flat1;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setFlat1(Flat flat1) {
+	this.flat1 = flat1;
+    }
 
-	public Flat getFlat1() {
-		return this.flat1;
-	}
+    public Flat getFlat2() {
+	return this.flat2;
+    }
 
-	public void setFlat1(Flat flat1) {
-		this.flat1 = flat1;
-	}
-
-	public Flat getFlat2() {
-		return this.flat2;
-	}
-
-	public void setFlat2(Flat flat2) {
-		this.flat2 = flat2;
-	}
+    public void setFlat2(Flat flat2) {
+	this.flat2 = flat2;
+    }
 
 }

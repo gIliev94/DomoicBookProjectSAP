@@ -14,31 +14,29 @@ import javax.servlet.http.HttpServletResponse;
 import dao.PrivateMessageDAO;
 import model.PrivateMessage;
 
-
 public class OutboxServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
 
     public OutboxServlet() {
-        super();
+	super();
     }
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+	int flatNumber = Integer.valueOf((request.getSession().getAttribute("currentFlat").toString()));
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int flatNumber=Integer.valueOf((request.getSession().getAttribute("currentFlat").toString()));
-		
-		PrivateMessageDAO pmDAO=new PrivateMessageDAO(getEntityManager());
-		
-		Vector<PrivateMessage>outbox=pmDAO.getInfoAboutOutbox(flatNumber);
-		
-		request.setAttribute("outboxMessages", outbox);
-		
-		 RequestDispatcher rd=request.getRequestDispatcher("Outbox.jsp");  
-         rd.forward(request, response); 
-	}
+	PrivateMessageDAO pmDAO = new PrivateMessageDAO(getEntityManager());
 
+	Vector<PrivateMessage> outbox = pmDAO.getInfoAboutOutbox(flatNumber);
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	}
+	request.setAttribute("outboxMessages", outbox);
+
+	RequestDispatcher rd = request.getRequestDispatcher("Outbox.jsp");
+	rd.forward(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+    }
 
 }

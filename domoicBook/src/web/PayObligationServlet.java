@@ -14,35 +14,35 @@ import javax.servlet.http.HttpServletResponse;
 import dao.PaymentDAO;
 import model.Payment;
 
-
 public class PayObligationServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-  
+    private static final long serialVersionUID = 1L;
+
     public PayObligationServlet() {
-        super();
+	super();
 
     }
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		if(request.getSession().getAttribute("currentFlat")==null||request.getSession().getAttribute("flatStatus")==null){
-			RequestDispatcher rd=request.getRequestDispatcher("Login.jsp");  
-			rd.forward(request, response); 
-		}
-		
-		PaymentDAO payDAO = new PaymentDAO(getEntityManager());
-		
-		Vector<Payment> obligations=payDAO.getAllObligations();
-		
-		request.setAttribute("allObligations", obligations);
-		
-		RequestDispatcher rd=request.getRequestDispatcher("ViewAllPayments.jsp");  
-        rd.forward(request, response); 
+	if (request.getSession().getAttribute("currentFlat") == null
+		|| request.getSession().getAttribute("flatStatus") == null) {
+	    RequestDispatcher rd = request.getRequestDispatcher("Login.jsp");
+	    rd.forward(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	}
+	PaymentDAO payDAO = new PaymentDAO(getEntityManager());
+
+	Vector<Payment> obligations = payDAO.getAllObligations();
+
+	request.setAttribute("allObligations", obligations);
+
+	RequestDispatcher rd = request.getRequestDispatcher("ViewAllPayments.jsp");
+	rd.forward(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+    }
 
 }

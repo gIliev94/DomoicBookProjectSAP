@@ -10,41 +10,38 @@ import javax.servlet.http.HttpServletResponse;
 import dao.PeopleDAO;
 import model.People;
 
-
 public class AddMemberServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
 
     public AddMemberServlet() {
-        super();
+	super();
 
     }
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+	response.getWriter().append("Served at: ").append(request.getContextPath());
+    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
 
+	String firstName = String.valueOf(request.getParameter("firstName"));
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String firstName = String.valueOf(request.getParameter("firstName"));
-		 
-		String lastName = String.valueOf(request.getParameter("lastName"));
-		
-		int flatNumber = Integer.valueOf(request.getParameter("flatNumber"));
-		
-		PeopleDAO pplDAO = new PeopleDAO(getEntityManager());
-		
-		People person = new People();
-		
-		person.setFirstName(firstName);
-		person.setLastName(lastName);
-		
-		
-		pplDAO.addMember(person, flatNumber);
+	String lastName = String.valueOf(request.getParameter("lastName"));
 
-		doGet(request, response);
-	}
+	int flatNumber = Integer.valueOf(request.getParameter("flatNumber"));
+
+	PeopleDAO pplDAO = new PeopleDAO(getEntityManager());
+
+	People person = new People();
+
+	person.setFirstName(firstName);
+	person.setLastName(lastName);
+
+	pplDAO.addMember(person, flatNumber);
+
+	doGet(request, response);
+    }
 
 }

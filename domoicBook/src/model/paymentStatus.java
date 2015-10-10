@@ -1,5 +1,5 @@
 package model;
 
 public enum paymentStatus {
-NOT_PAID,PAID
+    NOT_PAID, PAID
 }

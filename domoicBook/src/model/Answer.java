@@ -8,74 +8,71 @@ import java.util.Date;
 
 import javax.persistence.*;
 
-
 @Entity
-@Table(name="answers")
+@Table(name = "answers")
 public class Answer implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private AnswerPK id;
-	
-	@Column(name="CONTENT")
-	private String content;
-	
-	@Column(name="DATE")
-	 private Timestamp date;
-	
-	@ManyToOne
-	@JoinColumn(name="discuss_id")
-	private Discussion discussion;
+    @EmbeddedId
+    private AnswerPK id;
 
-	@ManyToOne
-	@JoinColumn(name="replier_number")
-	private Flat flat;
+    @Column(name = "CONTENT")
+    private String content;
 
-	public Answer() {
-	}
-	
-	
-	public AnswerPK getId() {
-		return this.id;
-	}
+    @Column(name = "DATE")
+    private Timestamp date;
 
-	public void setId(AnswerPK id) {
-		this.id = id;
-	}
+    @ManyToOne
+    @JoinColumn(name = "discuss_id")
+    private Discussion discussion;
 
-	public String getContent() {
-		return this.content;
-	}
+    @ManyToOne
+    @JoinColumn(name = "replier_number")
+    private Flat flat;
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public Answer() {
+    }
 
-	public Discussion getDiscussion() {
-		return this.discussion;
-	}
+    public AnswerPK getId() {
+	return this.id;
+    }
 
-	public void setDiscussion(Discussion discussion) {
-		this.discussion = discussion;
-	}
+    public void setId(AnswerPK id) {
+	this.id = id;
+    }
 
-	public Flat getFlat() {
-		return this.flat;
-	}
+    public String getContent() {
+	return this.content;
+    }
 
-	public void setFlat(Flat flat) {
-		this.flat = flat;
-	}
+    public void setContent(String content) {
+	this.content = content;
+    }
 
+    public Discussion getDiscussion() {
+	return this.discussion;
+    }
 
-	public String getDate() {
-		  SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		  return dateFormat.format(this.date);
-		  }
+    public void setDiscussion(Discussion discussion) {
+	this.discussion = discussion;
+    }
 
-		  public void setDate() {
-		   Calendar calendar=Calendar.getInstance();
-		   Date dateNow=calendar.getTime();
-		   this.date=new Timestamp(dateNow.getTime());
-		  }
+    public Flat getFlat() {
+	return this.flat;
+    }
+
+    public void setFlat(Flat flat) {
+	this.flat = flat;
+    }
+
+    public String getDate() {
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	return dateFormat.format(this.date);
+    }
+
+    public void setDate() {
+	Calendar calendar = Calendar.getInstance();
+	Date dateNow = calendar.getTime();
+	this.date = new Timestamp(dateNow.getTime());
+    }
 }

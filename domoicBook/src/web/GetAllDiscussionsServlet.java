@@ -15,34 +15,34 @@ import dao.DiscussionDAO;
 import model.Discussion;
 
 public class GetAllDiscussionsServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
 
     public GetAllDiscussionsServlet() {
-        super();
+	super();
     }
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-		if(request.getSession().getAttribute("currentFlat")==null||request.getSession().getAttribute("flatStatus")==null){
-			RequestDispatcher rd=request.getRequestDispatcher("Login.jsp");  
-			rd.forward(request, response); 
-		}
-	
-		DiscussionDAO disDAO = new DiscussionDAO(getEntityManager());
-		
-		Vector<Discussion> discussions=disDAO.showInfoAboutAllDiscussions();
-		
-		request.setAttribute("allDiscussions", discussions);
-		
-		RequestDispatcher rd=request.getRequestDispatcher("Discussions.jsp");  
-        rd.forward(request, response); 
-		
+	if (request.getSession().getAttribute("currentFlat") == null
+		|| request.getSession().getAttribute("flatStatus") == null) {
+	    RequestDispatcher rd = request.getRequestDispatcher("Login.jsp");
+	    rd.forward(request, response);
 	}
 
+	DiscussionDAO disDAO = new DiscussionDAO(getEntityManager());
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	}
+	Vector<Discussion> discussions = disDAO.showInfoAboutAllDiscussions();
+
+	request.setAttribute("allDiscussions", discussions);
+
+	RequestDispatcher rd = request.getRequestDispatcher("Discussions.jsp");
+	rd.forward(request, response);
+
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+    }
 
 }

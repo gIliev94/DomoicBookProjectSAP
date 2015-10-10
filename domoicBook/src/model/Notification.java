@@ -8,73 +8,71 @@ import java.util.Date;
 
 import javax.persistence.*;
 
-
-
 @Entity
-@Table(name="notifications")
-@NamedQuery(name="Notification.findAll", query="SELECT n FROM Notification n")
+@Table(name = "notifications")
+@NamedQuery(name = "Notification.findAll", query = "SELECT n FROM Notification n")
 public class Notification implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	private int id;
+    @Id
+    private int id;
 
-	@Lob
-	private String content;
+    @Lob
+    private String content;
 
-	@Column(name="DATE")
-	 private Timestamp date;
+    @Column(name = "DATE")
+    private Timestamp date;
 
-	private String title;
+    private String title;
 
-	@ManyToOne
-	@JoinColumn(name="flatNumber")
-	private Flat flat;
+    @ManyToOne
+    @JoinColumn(name = "flatNumber")
+    private Flat flat;
 
-	public Notification() {
-	}
+    public Notification() {
+    }
 
-	public int getId() {
-		return this.id;
-	}
+    public int getId() {
+	return this.id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+	this.id = id;
+    }
 
-	public String getContent() {
-		return this.content;
-	}
+    public String getContent() {
+	return this.content;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public void setContent(String content) {
+	this.content = content;
+    }
 
-	public String getDate() {
-		  SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		  return dateFormat.format(this.date);
-		  }
+    public String getDate() {
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	return dateFormat.format(this.date);
+    }
 
-		  public void setDate() {
-		   Calendar calendar=Calendar.getInstance();
-		   Date dateNow=calendar.getTime();
-		   this.date=new Timestamp(dateNow.getTime());
-		  }
+    public void setDate() {
+	Calendar calendar = Calendar.getInstance();
+	Date dateNow = calendar.getTime();
+	this.date = new Timestamp(dateNow.getTime());
+    }
 
-	public String getTitle() {
-		return this.title;
-	}
+    public String getTitle() {
+	return this.title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title) {
+	this.title = title;
+    }
 
-	public Flat getFlat() {
-		return this.flat;
-	}
+    public Flat getFlat() {
+	return this.flat;
+    }
 
-	public void setFlat(Flat flat) {
-		this.flat = flat;
-	}
+    public void setFlat(Flat flat) {
+	this.flat = flat;
+    }
 
 }

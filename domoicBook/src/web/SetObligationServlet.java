@@ -11,38 +11,36 @@ import model.Obligation;
 
 import static utils.EntityManagerProvider.getEntityManager;
 
-
 public class SetObligationServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
 
     public SetObligationServlet() {
-        super();
-  
+	super();
+
     }
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+	response.sendRedirect("CheckObligationServlet");
+    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect("CheckObligationServlet");
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
 
+	String description = String.valueOf(request.getParameter("description"));
+	String deadline = String.valueOf(request.getParameter("deadline"));
+	double debt = Double.valueOf(request.getParameter("debt"));
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String description = String.valueOf(request.getParameter("description"));
-		String deadline = String.valueOf(request.getParameter("deadline"));
-		double debt = Double.valueOf(request.getParameter("debt"));
-		
-		ObligationDAO oblDAO=new ObligationDAO(getEntityManager());
-		
-		Obligation obl = new Obligation();
-		obl.setDescription(description);
-		obl.setDeadline(deadline);
-		obl.setDebt(debt);
-		
-		oblDAO.addObligation(obl);
-		
-		doGet(request, response);
-	}
+	ObligationDAO oblDAO = new ObligationDAO(getEntityManager());
+
+	Obligation obl = new Obligation();
+	obl.setDescription(description);
+	obl.setDeadline(deadline);
+	obl.setDebt(debt);
+
+	oblDAO.addObligation(obl);
+
+	doGet(request, response);
+    }
 
 }

@@ -10,87 +10,84 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
-
 @Entity
-@Table(name="discussions")
-@NamedQuery(name="Discussion.findAll", query="SELECT d FROM Discussion d")
+@Table(name = "discussions")
+@NamedQuery(name = "Discussion.findAll", query = "SELECT d FROM Discussion d")
 public class Discussion implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-	private String content;
-	
-	@Column(name="DATE")
-	 private Timestamp date;
-	
-	private String title;
+    private String content;
 
-	@OneToMany(mappedBy="discussion")
-	private List<Answer> answers;
+    @Column(name = "DATE")
+    private Timestamp date;
 
-	public Discussion() {
-	}
+    private String title;
 
-	public int getId() {
-		return this.id;
-	}
+    @OneToMany(mappedBy = "discussion")
+    private List<Answer> answers;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public Discussion() {
+    }
 
-	public String getContent() {
-		return this.content;
-	}
+    public int getId() {
+	return this.id;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public void setId(int id) {
+	this.id = id;
+    }
 
-	public String getTitle() {
-		return this.title;
-	}
+    public String getContent() {
+	return this.content;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setContent(String content) {
+	this.content = content;
+    }
 
-	public List<Answer> getAnswers() {
-		return this.answers;
-	}
+    public String getTitle() {
+	return this.title;
+    }
 
-	public void setAnswers(List<Answer> answers) {
-		this.answers = answers;
-	}
-	
+    public void setTitle(String title) {
+	this.title = title;
+    }
 
-	public Answer addAnswer(Answer answer) {
-		getAnswers().add(answer);
-		answer.setDiscussion(this);
+    public List<Answer> getAnswers() {
+	return this.answers;
+    }
 
-		return answer;
-	}
+    public void setAnswers(List<Answer> answers) {
+	this.answers = answers;
+    }
 
-	public Answer removeAnswer(Answer answer) {
-		getAnswers().remove(answer);
-		answer.setDiscussion(null);
+    public Answer addAnswer(Answer answer) {
+	getAnswers().add(answer);
+	answer.setDiscussion(this);
 
-		return answer;
-	}
+	return answer;
+    }
 
-	public String getDate() {
-		  SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		  return dateFormat.format(this.date);
-		  }
+    public Answer removeAnswer(Answer answer) {
+	getAnswers().remove(answer);
+	answer.setDiscussion(null);
 
-		  public void setDate() {
-		   Calendar calendar=Calendar.getInstance();
-		   Date dateNow=calendar.getTime();
-		   this.date=new Timestamp(dateNow.getTime());
-		  }
+	return answer;
+    }
+
+    public String getDate() {
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	return dateFormat.format(this.date);
+    }
+
+    public void setDate() {
+	Calendar calendar = Calendar.getInstance();
+	Date dateNow = calendar.getTime();
+	this.date = new Timestamp(dateNow.getTime());
+    }
 
 }

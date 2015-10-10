@@ -17,92 +17,90 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name="obligations")
-@NamedQuery(name="Obligation.findAll", query="SELECT o FROM Obligation o")
+@Table(name = "obligations")
+@NamedQuery(name = "Obligation.findAll", query = "SELECT o FROM Obligation o")
 public class Obligation implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-	@Column(name = "DEADLINE")
-	 Timestamp deadline;
+    @Column(name = "DEADLINE")
+    Timestamp deadline;
 
-	private double debt;
+    private double debt;
 
-	@Lob
-	private String description;
+    @Lob
+    private String description;
 
-	@OneToMany(mappedBy="obligation")
-	private List<Payment> payments;
+    @OneToMany(mappedBy = "obligation")
+    private List<Payment> payments;
 
-	public Obligation() {
+    public Obligation() {
+    }
+
+    public int getId() {
+	return this.id;
+    }
+
+    public void setId(int id) {
+	this.id = id;
+    }
+
+    public String getDeadline() {
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	return dateFormat.format(this.deadline);
+    }
+
+    public void setDeadline(String inputDeadline) {
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	try {
+	    Date dateNow = dateFormat.parse(inputDeadline);
+	    this.deadline = new Timestamp(dateNow.getTime());
+	} catch (ParseException e) {
+	    System.out.println("An error has occured..problem with parsing.");
+	    e.printStackTrace();
 	}
+    }
 
-	public int getId() {
-		return this.id;
-	}
+    public double getDebt() {
+	return this.debt;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setDebt(double debt) {
+	this.debt = debt;
+    }
 
-	public String getDeadline() {
-		 SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		 return dateFormat.format(this.deadline);
-		 }
+    public String getDescription() {
+	return this.description;
+    }
 
-	public void setDeadline(String inputDeadline) {
-		  DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		  try {
-		   Date dateNow = dateFormat.parse(inputDeadline);
-		    this.deadline=new Timestamp(dateNow.getTime());
-		  } catch (ParseException e) {
-		   System.out.println("An error has occured..problem with parsing.");
-		   e.printStackTrace();
-		  }
-		 }
-	
-	
-	public double getDebt() {
-		return this.debt;
-	}
+    public void setDescription(String description) {
+	this.description = description;
+    }
 
-	public void setDebt(double debt) {
-		this.debt = debt;
-	}
+    public List<Payment> getPayments() {
+	return this.payments;
+    }
 
-	public String getDescription() {
-		return this.description;
-	}
+    public void setPayments(List<Payment> payments) {
+	this.payments = payments;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public Payment addPayment(Payment payment) {
+	getPayments().add(payment);
+	payment.setObligation(this);
 
-	public List<Payment> getPayments() {
-		return this.payments;
-	}
+	return payment;
+    }
 
-	public void setPayments(List<Payment> payments) {
-		this.payments = payments;
-	}
+    public Payment removePayment(Payment payment) {
+	getPayments().remove(payment);
+	payment.setObligation(null);
 
-	public Payment addPayment(Payment payment) {
-		getPayments().add(payment);
-		payment.setObligation(this);
-
-		return payment;
-	}
-
-	public Payment removePayment(Payment payment) {
-		getPayments().remove(payment);
-		payment.setObligation(null);
-
-		return payment;
-	}
+	return payment;
+    }
 
 }
