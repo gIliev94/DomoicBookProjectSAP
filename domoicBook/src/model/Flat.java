@@ -3,12 +3,19 @@ package model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
+/**
+ * 
+ * @authors Georgi Iliev, Vencislav Penev
+ *
+ */
 @Entity
 @Table(name = "flats")
 @NamedQuery(name = "Flat.findAll", query = "SELECT f FROM Flat f")
 public class Flat implements Serializable {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = UUID.randomUUID().getLeastSignificantBits();
 
     @Id
     private int number;
@@ -20,9 +27,9 @@ public class Flat implements Serializable {
     private int roomCount;
 
     @Enumerated(EnumType.STRING)
-    private status status;
+    private Status status;
 
-    @OneToMany(mappedBy = "flat")
+    @OneToMany(mappedBy = "flat", cascade = CascadeType.PERSIST)
     private List<Answer> answers;
 
     @OneToMany(mappedBy = "flat")
@@ -32,22 +39,22 @@ public class Flat implements Serializable {
     private List<Payment> payments;
 
     @OneToMany(mappedBy = "flat")
-    private List<People> peoples;
+    private List<Resident> residents;
 
-    @OneToMany(mappedBy = "flat1")
-    private List<PrivateMessage> privateMessages1;
+    @OneToMany(mappedBy = "sender")
+    private List<PrivateMessage> sentMessages;
 
-    @OneToMany(mappedBy = "flat2")
-    private List<PrivateMessage> privateMessages2;
+    @OneToMany(mappedBy = "recipient")
+    private List<PrivateMessage> receivedMessages;
 
     public Flat() {
     }
 
-    public status getStatus() {
+    public Status getStatus() {
 	return this.status;
     }
 
-    public void setStatus(status status) {
+    public void setStatus(Status status) {
 	this.status = status;
     }
 
@@ -149,70 +156,70 @@ public class Flat implements Serializable {
 	return payment;
     }
 
-    public List<People> getPeoples() {
-	return this.peoples;
+    public List<Resident> getResidents() {
+	return this.residents;
     }
 
-    public void setPeoples(List<People> peoples) {
-	this.peoples = peoples;
+    public void setResidents(List<Resident> residents) {
+	this.residents = residents;
     }
 
-    public People addPeople(People people) {
-	getPeoples().add(people);
-	people.setFlat(this);
+    public Resident addResident(Resident resident) {
+	getResidents().add(resident);
+	resident.setFlat(this);
 
-	return people;
+	return resident;
     }
 
-    public People removePeople(People people) {
-	getPeoples().remove(people);
-	people.setFlat(null);
+    public Resident removeResident(Resident resident) {
+	getResidents().remove(resident);
+	resident.setFlat(null);
 
-	return people;
+	return resident;
     }
 
-    public List<PrivateMessage> getPrivateMessages1() {
-	return this.privateMessages1;
+    public List<PrivateMessage> getSentMessages() {
+	return this.sentMessages;
     }
 
-    public void setPrivateMessages1(List<PrivateMessage> privateMessages1) {
-	this.privateMessages1 = privateMessages1;
+    public void setSentMessages(List<PrivateMessage> sentMessage) {
+	this.sentMessages = sentMessage;
     }
 
-    public PrivateMessage addPrivateMessages1(PrivateMessage privateMessages1) {
-	getPrivateMessages1().add(privateMessages1);
-	privateMessages1.setFlat1(this);
+    public PrivateMessage addSentMessage(PrivateMessage sentMessage) {
+	getSentMessages().add(sentMessage);
+	sentMessage.setSender(this);
 
-	return privateMessages1;
+	return sentMessage;
     }
 
-    public PrivateMessage removePrivateMessages1(PrivateMessage privateMessages1) {
-	getPrivateMessages1().remove(privateMessages1);
-	privateMessages1.setFlat1(null);
+    public PrivateMessage removeSentMessage(PrivateMessage sentMessage) {
+	getSentMessages().remove(sentMessage);
+	sentMessage.setSender(null);
 
-	return privateMessages1;
+	return sentMessage;
     }
 
-    public List<PrivateMessage> getPrivateMessages2() {
-	return this.privateMessages2;
+    public List<PrivateMessage> getReceivedMessages() {
+	return this.receivedMessages;
     }
 
-    public void setPrivateMessages2(List<PrivateMessage> privateMessages2) {
-	this.privateMessages2 = privateMessages2;
+    public void setReceivedMessages(List<PrivateMessage> receivedMessages) {
+	this.receivedMessages = receivedMessages;
     }
 
-    public PrivateMessage addPrivateMessages2(PrivateMessage privateMessages2) {
-	getPrivateMessages2().add(privateMessages2);
-	privateMessages2.setFlat2(this);
+    public PrivateMessage addReceivedMessage(PrivateMessage receivedMessage) {
+	getReceivedMessages().add(receivedMessage);
+	receivedMessage.setRecipient(this);
 
-	return privateMessages2;
+	return receivedMessage;
     }
 
-    public PrivateMessage removePrivateMessages2(PrivateMessage privateMessages2) {
-	getPrivateMessages2().remove(privateMessages2);
-	privateMessages2.setFlat2(null);
+    public PrivateMessage removeReceivedMessage(PrivateMessage receivedMessage) {
+	getReceivedMessages().remove(receivedMessage);
+	receivedMessage.setRecipient(null);
 
-	return privateMessages2;
+	return receivedMessage;
     }
 
 }

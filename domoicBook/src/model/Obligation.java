@@ -7,6 +7,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,11 +19,17 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * 
+ * @authors Georgi Iliev, Vencislav Penev
+ *
+ */
 @Entity
 @Table(name = "obligations")
 @NamedQuery(name = "Obligation.findAll", query = "SELECT o FROM Obligation o")
 public class Obligation implements Serializable {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = UUID.randomUUID().getLeastSignificantBits();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,18 +58,16 @@ public class Obligation implements Serializable {
     }
 
     public String getDeadline() {
-	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	return dateFormat.format(this.deadline);
+	return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this.deadline);
     }
 
     public void setDeadline(String inputDeadline) {
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	try {
-	    Date dateNow = dateFormat.parse(inputDeadline);
-	    this.deadline = new Timestamp(dateNow.getTime());
+	    Date currentDate = dateFormat.parse(inputDeadline);
+	    this.deadline = new Timestamp(currentDate.getTime());
 	} catch (ParseException e) {
-	    System.out.println("An error has occured..problem with parsing.");
-	    e.printStackTrace();
+	    // Figure out where to propagate or throw it(most likely)
 	}
     }
 

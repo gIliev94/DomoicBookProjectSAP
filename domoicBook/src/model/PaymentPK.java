@@ -1,12 +1,19 @@
 package model;
 
 import java.io.Serializable;
+import java.util.UUID;
+
 import javax.persistence.*;
 
+/**
+ * 
+ * @authors Georgi Iliev, Vencislav Penev
+ *
+ */
 @Embeddable
 public class PaymentPK implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = UUID.randomUUID().getLeastSignificantBits();
 
     @Column(name = "obligation_id", insertable = false, updatable = false)
     private int obligationId;

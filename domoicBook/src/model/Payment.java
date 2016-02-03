@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -16,18 +17,24 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+/**
+ * 
+ * @authors Georgi Iliev, Vencislav Penev
+ *
+ */
 @Entity
 @Table(name = "payments")
 @NamedQuery(name = "Payment.findAll", query = "SELECT p FROM Payment p")
 public class Payment implements Serializable {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = UUID.randomUUID().getLeastSignificantBits();
 
     @EmbeddedId
     private PaymentPK id;
 
     @Column(name = "PAYMENTSTATUS")
     @Enumerated(EnumType.STRING)
-    private paymentStatus paymentStatus;
+    private PaymentStatus paymentStatus;
 
     @Column(name = "PAYMENTDATE")
     private Timestamp paymentDate;
@@ -54,24 +61,22 @@ public class Payment implements Serializable {
     }
 
     public String getPaymentDate() {
-	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	if (this.paymentDate == null) {
 	    return "-";
-	} else
-	    return dateFormat.format(this.paymentDate);
+	}
+	return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this.paymentDate);
     }
 
     public void setPaymentDate() {
-	Calendar calendar = Calendar.getInstance();
-	Date dateNow = calendar.getTime();
-	this.paymentDate = new Timestamp(dateNow.getTime());
+	Date currentDate = Calendar.getInstance().getTime();
+	this.paymentDate = new Timestamp(currentDate.getTime());
     }
 
     public String getPaymentStatus() {
 	return this.paymentStatus.name();
     }
 
-    public void setPaymentStatus(paymentStatus paymentStatus) {
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
 	this.paymentStatus = paymentStatus;
     }
 

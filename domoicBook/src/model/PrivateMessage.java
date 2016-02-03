@@ -5,14 +5,21 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.*;
 
+/**
+ * 
+ * @authors Georgi Iliev, Vencislav Penev
+ *
+ */
 @Entity
 @Table(name = "private_messages")
 @NamedQuery(name = "PrivateMessage.findAll", query = "SELECT p FROM PrivateMessage p")
 public class PrivateMessage implements Serializable {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = UUID.randomUUID().getLeastSignificantBits();
 
     @Id
     private int id;
@@ -27,11 +34,11 @@ public class PrivateMessage implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "senderNumber")
-    private Flat flat1;
+    private Flat sender;
 
     @ManyToOne
     @JoinColumn(name = "receiverNumber")
-    private Flat flat2;
+    private Flat recipient;
 
     public PrivateMessage() {
     }
@@ -53,14 +60,12 @@ public class PrivateMessage implements Serializable {
     }
 
     public String getDate() {
-	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	return dateFormat.format(this.date);
+	return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this.date);
     }
 
     public void setDate() {
-	Calendar calendar = Calendar.getInstance();
-	Date dateNow = calendar.getTime();
-	this.date = new Timestamp(dateNow.getTime());
+	Date currentDate = Calendar.getInstance().getTime();
+	this.date = new Timestamp(currentDate.getTime());
     }
 
     public String getTitle() {
@@ -71,20 +76,20 @@ public class PrivateMessage implements Serializable {
 	this.title = title;
     }
 
-    public Flat getFlat1() {
-	return this.flat1;
+    public Flat getSender() {
+	return this.sender;
     }
 
-    public void setFlat1(Flat flat1) {
-	this.flat1 = flat1;
+    public void setSender(Flat sender) {
+	this.sender = sender;
     }
 
-    public Flat getFlat2() {
-	return this.flat2;
+    public Flat getRecipient() {
+	return this.recipient;
     }
 
-    public void setFlat2(Flat flat2) {
-	this.flat2 = flat2;
+    public void setRecipient(Flat recipient) {
+	this.recipient = recipient;
     }
 
 }
