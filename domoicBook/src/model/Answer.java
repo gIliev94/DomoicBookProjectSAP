@@ -5,13 +5,20 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.*;
 
+/**
+ * 
+ * @authors Georgi Iliev, Vencislav Penev
+ *
+ */
 @Entity
 @Table(name = "answers")
 public class Answer implements Serializable {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = UUID.randomUUID().getLeastSignificantBits();
 
     @EmbeddedId
     private AnswerPK id;
@@ -66,13 +73,11 @@ public class Answer implements Serializable {
     }
 
     public String getDate() {
-	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	return dateFormat.format(this.date);
+	return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this.date);
     }
 
     public void setDate() {
-	Calendar calendar = Calendar.getInstance();
-	Date dateNow = calendar.getTime();
-	this.date = new Timestamp(dateNow.getTime());
+	Date currentDate = Calendar.getInstance().getTime();
+	this.date = new Timestamp(currentDate.getTime());
     }
 }

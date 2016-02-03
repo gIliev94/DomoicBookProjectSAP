@@ -1,35 +1,43 @@
 package model;
 
 import java.io.Serializable;
+import java.util.UUID;
+
 import javax.persistence.*;
 
+/**
+ * 
+ * @authors Georgi Iliev, Vencislav Penev
+ *
+ */
 @Embeddable
 public class AnswerPK implements Serializable {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = UUID.randomUUID().getLeastSignificantBits();
 
     @Column(name = "discuss_id", insertable = false, updatable = false)
-    private int discussId;
+    private int discussionId;
 
     @Column(name = "replier_number", insertable = false, updatable = false)
-    private int replierNumber;
+    private int recipientNumber;
 
     public AnswerPK() {
     }
 
     public int getDiscussId() {
-	return this.discussId;
+	return this.discussionId;
     }
 
     public void setDiscussId(int discussId) {
-	this.discussId = discussId;
+	this.discussionId = discussId;
     }
 
     public int getReplierNumber() {
-	return this.replierNumber;
+	return this.recipientNumber;
     }
 
-    public void setReplierNumber(int replierNumber) {
-	this.replierNumber = replierNumber;
+    public void setReplierNumber(int recipientNumber) {
+	this.recipientNumber = recipientNumber;
     }
 
     public boolean equals(Object other) {
@@ -40,14 +48,14 @@ public class AnswerPK implements Serializable {
 	    return false;
 	}
 	AnswerPK castOther = (AnswerPK) other;
-	return (this.discussId == castOther.discussId) && (this.replierNumber == castOther.replierNumber);
+	return (this.discussionId == castOther.discussionId) && (this.recipientNumber == castOther.recipientNumber);
     }
 
     public int hashCode() {
 	final int prime = 31;
 	int hash = 17;
-	hash = hash * prime + this.discussId;
-	hash = hash * prime + this.replierNumber;
+	hash = hash * prime + this.discussionId;
+	hash = hash * prime + this.recipientNumber;
 
 	return hash;
     }
