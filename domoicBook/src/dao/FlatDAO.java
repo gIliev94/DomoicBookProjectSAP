@@ -1,43 +1,69 @@
 package dao;
 
 import java.security.MessageDigest;
+import java.util.Calendar;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import org.apache.log4j.Logger;
+
 import model.Flat;
 
+/**
+ * 
+ * @authors Georgi Iliev, Vencislav Penev
+ *
+ */
 public class FlatDAO {
-    private EntityManager em;
 
-    public FlatDAO(EntityManager em) {
-	this.em = em;
+    private static final Logger LOG = Logger.getLogger(FlatDAO.class);
+
+    private EntityManager entityManager;
+
+    public FlatDAO(EntityManager entityManager) {
+	this.entityManager = entityManager;
     }
 
-    public void addFlat(Flat flat) {
+    /**
+     * @param newflat
+     */
+    public void addFlat(Flat newflat) {
 	try {
-	    em.getTransaction().begin();
-	    flat.setPassword(getHashedPassword(flat.getPassword()));
-	    em.persist(flat);
-	    em.getTransaction().commit();
+	    entityManager.getTransaction().begin();
+	    LOG.info("Begin transaction: " + Calendar.getInstance().getTime());
+
+	    newflat.setPassword(getHashedPassword(newflat.getPassword()));
+
+	    entityManager.persist(newflat);
+	    entityManager.getTransaction().commit();
+	    LOG.info("Commit passed: " + Calendar.getInstance().getTime());
 	} finally {
-	    if (em.getTransaction().isActive()) {
-		em.getTransaction().rollback();
+	    if (entityManager.getTransaction().isActive()) {
+		entityManager.getTransaction().rollback();
+		LOG.warn("Transaction failed for flat (" + newflat.getNumber() + ") Performing rollback.");
 	    }
 	}
     }
 
+    /**
+     * @param flatNumber
+     * @param password
+     * @return
+     */
     public boolean validateFlat(int flatNumber, String password) {
-	String validateQuery = "SELECT u FROM Flat u WHERE u.number=:flatNumber AND u.password=:password";
-	TypedQuery<Flat> query = em.createQuery(validateQuery, Flat.class);
-	query.setParameter("flatNumber", flatNumber);
-	query.setParameter("password", getHashedPassword(password));
-	return queryUser(query) != null;
+	String validationQuery = "SELECT u FROM Flat u WHERE u.number=:flatNumber AND u.password=:password";
+
+	TypedQuery<Flat> validatedFlatFilter = entityManager.createQuery(validationQuery, Flat.class);
+	validatedFlatFilter.setParameter("flatNumber", flatNumber);
+	validatedFlatFilter.setParameter("password", getHashedPassword(password));
+
+	return findValidatedFlat(validatedFlatFilter) != null;
     }
 
-    private Flat queryUser(TypedQuery<Flat> query) {
+    private Flat findValidatedFlat(TypedQuery<Flat> validatedFlatFilter) {
 	try {
-	    return query.getSingleResult();
+	    return validatedFlatFilter.getSingleResult();
 	} catch (Exception e) {
 	    return null;
 	}
@@ -45,11 +71,13 @@ public class FlatDAO {
 
     private String getHashedPassword(String password) {
 	try {
-	    MessageDigest mda = MessageDigest.getInstance("SHA-512");
-	    password = new String(mda.digest(password.getBytes()));
+	    MessageDigest decrypter = MessageDigest.getInstance("SHA-512");
+	    password = new String(decrypter.digest(password.getBytes()));
 	} catch (Exception e) {
-	    e.printStackTrace();
+	    LOG.error("ERROR: ", e);
+	    throw new RuntimeException("ERROR: ", e);
 	}
+
 	return password;
     }
 }

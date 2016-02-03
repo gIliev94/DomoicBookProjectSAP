@@ -1,51 +1,83 @@
 package dao;
 
+import java.util.Calendar;
 import java.util.Vector;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import org.apache.log4j.Logger;
+
 import model.Flat;
 import model.PrivateMessage;
 
+/**
+ * 
+ * @authors Georgi Iliev, Vencislav Penev
+ *
+ */
 public class PrivateMessageDAO {
-    private EntityManager em;
 
-    public PrivateMessageDAO(EntityManager em) {
-	this.em = em;
+    private static final Logger LOG = Logger.getLogger(PrivateMessageDAO.class);
+
+    private EntityManager entityManager;
+
+    public PrivateMessageDAO(EntityManager entityManager) {
+	this.entityManager = entityManager;
     }
 
-    public void addPrivateMessage(PrivateMessage message, int senderNumber, int receiverNumber) {
+    /**
+     * @param message
+     * @param senderNumber
+     * @param recipientNumber
+     */
+    public void addPrivateMessage(PrivateMessage message, int senderNumber, int recipientNumber) {
 	try {
-	    em.getTransaction().begin();
-	    Flat sender = em.find(Flat.class, senderNumber);
-	    Flat receiver = em.find(Flat.class, receiverNumber);
-	    message.setFlat1(sender);
-	    message.setFlat2(receiver);
+	    entityManager.getTransaction().begin();
+	    LOG.info("Begin transaction: " + Calendar.getInstance().getTime());
+
+	    Flat sender = entityManager.find(Flat.class, senderNumber);
+	    Flat recipient = entityManager.find(Flat.class, recipientNumber);
+	    message.setSender(sender);
+	    message.setRecipient(recipient);
 	    message.setDate();
-	    em.persist(message);
-	    em.getTransaction().commit();
+
+	    entityManager.persist(message);
+	    entityManager.getTransaction().commit();
+	    LOG.info("Commit passed: " + Calendar.getInstance().getTime());
 	} finally {
-	    if (em.getTransaction().isActive()) {
-		em.getTransaction().rollback();
+	    if (entityManager.getTransaction().isActive()) {
+		entityManager.getTransaction().rollback();
+		LOG.warn("Transaction failed for message to flat (" + recipientNumber + ") Performing rollback.");
 	    }
 	}
     }
 
+    /**
+     * @param flatNumber
+     * @return
+     */
     public Vector<PrivateMessage> getInfoAboutInbox(int flatNumber) {
-	Flat flat = em.find(Flat.class, flatNumber);
-	String query = "SELECT u FROM PrivateMessage u WHERE u.flat2=:flat2";
-	TypedQuery<PrivateMessage> getQuery = em.createQuery(query, PrivateMessage.class);
-	getQuery.setParameter("flat2", flat);
-	return (Vector<PrivateMessage>) getQuery.getResultList();
+	Flat flat = entityManager.find(Flat.class, flatNumber);
+	String messageFilterQuery = "SELECT u FROM PrivateMessage u WHERE u.flat2=:flat2";
+
+	TypedQuery<PrivateMessage> messageFilter = entityManager.createQuery(messageFilterQuery, PrivateMessage.class);
+	messageFilter.setParameter("flat2", flat);
+
+	return (Vector<PrivateMessage>) messageFilter.getResultList();
     }
 
+    /**
+     * @param flatNumber
+     * @return
+     */
     public Vector<PrivateMessage> getInfoAboutOutbox(int flatNumber) {
-	Flat flat = em.find(Flat.class, flatNumber);
-	String query = "SELECT u FROM PrivateMessage u WHERE u.flat1=:flat1";
-	TypedQuery<PrivateMessage> getQuery = em.createQuery(query, PrivateMessage.class);
-	getQuery.setParameter("flat1", flat);
-	return (Vector<PrivateMessage>) getQuery.getResultList();
-    }
+	Flat flat = entityManager.find(Flat.class, flatNumber);
+	String messageFilterQuery = "SELECT u FROM PrivateMessage u WHERE u.flat1=:flat1";
 
+	TypedQuery<PrivateMessage> messageFilter = entityManager.createQuery(messageFilterQuery, PrivateMessage.class);
+	messageFilter.setParameter("flat1", flat);
+
+	return (Vector<PrivateMessage>) messageFilter.getResultList();
+    }
 }

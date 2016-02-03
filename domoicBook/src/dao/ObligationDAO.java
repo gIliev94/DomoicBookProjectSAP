@@ -1,43 +1,64 @@
 package dao;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
+
 import model.Flat;
 import model.Obligation;
 import model.Payment;
 
+/**
+ * 
+ * @authors Georgi Iliev, Vencislav Penev
+ *
+ */
 public class ObligationDAO {
-    private EntityManager em;
 
-    public ObligationDAO(EntityManager em) {
-	this.em = em;
+    private static final Logger LOG = Logger.getLogger(ObligationDAO.class);
+
+    private EntityManager entityManager;
+
+    public ObligationDAO(EntityManager entityManager) {
+	this.entityManager = entityManager;
     }
 
+    /**
+     * @param newObligation
+     */
     public void addObligation(Obligation newObligation) {
 	try {
-	    em.getTransaction().begin();
-	    em.persist(newObligation);
+	    entityManager.getTransaction().begin();
+	    LOG.info("Begin transaction: " + Calendar.getInstance().getTime());
+
 	    setObligationToAll(newObligation);
-	    em.getTransaction().commit();
+
+	    entityManager.persist(newObligation);
+	    entityManager.getTransaction().commit();
+	    LOG.info("Commit passed: " + Calendar.getInstance().getTime());
 	} finally {
-	    if (em.getTransaction().isActive()) {
-		em.getTransaction().rollback();
+	    if (entityManager.getTransaction().isActive()) {
+		entityManager.getTransaction().rollback();
+		LOG.warn("Transaction failed for obligation (" + newObligation.getDescription() + ") Performing rollback.");
 	    }
 	}
     }
 
-    @SuppressWarnings("unchecked")
-    public void setObligationToAll(Obligation obligation) {
-	Query query = em.createQuery("SELECT e " + "FROM Flat e");
-	List<Flat> list = query.getResultList();
-	for (Flat fl : list) {
-	    Payment pay = new Payment();
-	    pay.setFlat(fl);
-	    pay.setObligation(obligation);
-	    em.persist(pay);
+    private void setObligationToAll(Obligation obligation) {
+	Query flatFilter = entityManager.createQuery("SELECT e " + "FROM Flat e");
+
+	@SuppressWarnings("unchecked")
+	List<Flat> flats = flatFilter.getResultList();
+
+	for (Flat flat : flats) {
+	    Payment payment = new Payment();
+	    payment.setFlat(flat);
+	    payment.setObligation(obligation);
+	    entityManager.persist(payment);
 	}
     }
 }
