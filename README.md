@@ -27,9 +27,9 @@ The information in such a document is supposed to be private and visible only to
 <li>Payments</li>
 </ul>
 
-<p>The application works with 2 types of accounts - NORMAL accounts (the flats of regular residents) and an ADMIN account(the flat manager/housekeeper)</p>
+<p>The application works with 2 types of accounts - <b><i>NORMAL</i></b> accounts (the flats of regular residents) and an <b><i>ADMIN</b></i> account(the flat manager/housekeeper)</p>
 
-<p>The <i>NORMAL</i> type logged flats can mostly browse/read, but on some pages also comment or send messages
-The <i>ADMIN</i> has all the other options and his function is mostly to add/append/manage content.</p> 
+<p>The <b><i>NORMAL</b></i> type logged flats can mostly browse/read, but on some pages also comment or send messages
+The <b><i>ADMIN</b></i> has all the other options and his function is mostly to add/append/manage content.</p> 
 
 <p>Potentially there could be improvements and future versions...</p>
