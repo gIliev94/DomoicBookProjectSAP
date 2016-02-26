@@ -1,6 +1,8 @@
 # DomoicBookProjectSAP
 <p><h6>( Web app developped for SAP Internship programme )</h6></p>
 
+![Index page preview](/1_Home.png?raw=true "Index page preview")
+
 <p>Developped using the following:</p>
 <ul>
 <li>Eclipse Mars (Java EE)</li>
